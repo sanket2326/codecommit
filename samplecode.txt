@@ -1,17 +1,115 @@
-// Simple C program to display "hello world"
+1 c:\tools\pcom_bld.rex
+-
+------------------------------------------------------------------------------------------------------------------------------------------
+2 e:\cmds\CopyWorkArea.bat
+first delete everything from the extract directory
+So, when you run "del /q" followed by the path to a file or directory, it will delete the specified directory(ies) without asking for your confirmation.
+.............................
+xcopy /E /V /I /Y /R /D it will copy files and directories from the source to the destination while including subdirectories, verifying the copied files, automatically creating the destination directory if it doesn't exist, suppressing overwrite prompts, overwriting read-only files, and copying only files modified on or after the specified date if you use the /D switch followed by a date.
 
-// Header file for input output functions
-#include <studio.h>
+/E, "xcopy" will copy not only the specified files but also all the subdirectories and their contents, even if they are empty.
+/V, "xcopy" will verify the integrity of the copied files by comparing them to the original files after copying.
+/I, "xcopy" will assume that the destination specified is a directory, even if it doesn't exist. If you're copying multiple files, this is useful for automatically creating a destination directory.
+/Y, "xcopy" will automatically overwrite files in the destination directory without asking for confirmation.
+/R, "xcopy" will overwrite files in the destination directory, even if they are marked as read-only.
+/D, you can specify a date, and "xcopy" will only copy files that have been modified on or after that date.
+ 
+..............................
+del /F /S /Q followed by a directory path
+it will forcefully delete the specified file(s) with extension .db
+including all files and subdirectories within it, 
+without asking for confirmation it delets file.
+-----------------------------------------------------------------------------------------------------------------------------------------
+3 e:\cmds\dropfunc.rex
+its calls to sysdropfuncs but it does not exit and its goes to return.
+-------------------------------------------------------------------------------------------------------------------------------------------------
+4 e:\cmds\newbld.bat
 
-// main function -
-// where the execution of program begins 
-int main()
-{
+ It checks if the "bld.drv" variable is not empty or null. If it's not empty, it jumps to the label "cont"; otherwise, it continues with the script.
+dir command to list the directory contents which includes volume information and the output to the find command, which searches for the string "Volume" in the output. The results are then redirected to a file called "drv$$$.bat"
+"%%3" is a way to represent the third item found by the find command in the previous line.
+This likely means that "drv$$$.bat" contains some batch commands to process volume information, and this line executes them.
+This line deletes the " drv$$$.bat" file, presumably because it's no longer needed after it has been executed.
+This line deletes the "volume.bat" file, which was used to store the "set sanket=%%3" command earlier. This file may no longer be needed after the variable has been set and used.
+...............................................................
+Overall, this script extracting volume information from the current drive, storing it in a temporary file, and then processing that information using "drv$$$.bat" The "volume.bat" file is used to set a variable based on the volume information, and both temporary files are deleted after they have served their purposes.
+................................................................
+rd /q /s directory_path, it means:
 
-      // prints hello world
-      printf("hello world");
+Delete the directory specified by directory_path, its subdirectories, and all their contents without prompting for confirmation.
+..............................................................
+del /q "Delete the specified file(s) without prompting for confirmation.
+....................................................................
+The command md in Windows is used to create a new directory (folder) in a specified location.
+............................................
+for %%i in ( chs cht kor mls ) do rd /q /s e:\pkg_%%i
+Overall, the script you provided is designed to iterate through a list of items chs.cht,kor,mls and attempt to delete corresponding directories on the E: drive e:\pkg_%%i
+The /q and /s options ensure that the deletions are performed without confirmation and include all subdirectories and files within the specified directories. 
+...............................................................
+Overall, the script you provided is designed to iterate through a list of items chs.cht,kor,mls and attempt to delete corresponding directories on the E: drive e:\pkg_%%i
+The /q and /s options ensure that the deletions are performed without confirmation and include all subdirectories and files within the specified directories. 
+...............................................................
+for %%i in () do: This is the outer for loop. It iterates through the items in the list (mc m1 m2 m3 mt) one at a time and assigns each item to the loop variable %%i. The loop will execute the commands following do for each item in the list.
 
-      return 0;
-}
+for /d %%j in ("%blddrv%:\%%i????") do: This is the inner for loop. It is nested within the outer loop and is used to iterate through directories that match a specific pattern.
 
-      
+/d: This option specifies that the loop should only process directories (folders).
+%%j: This is the loop variable for the inner loop, and it represents each directory that matches the specified pattern.
+"%bld.drv%:\%%i????": This is the pattern used to match directories. It consists of:
+"%bld.drv%:\%%i": This part constructs a directory path by concatenating the value of the sanket variable with the values from the outer loop (%%i).
+"????": This part matches any directory names that have four characters (represented by the question marks). You may want to change this pattern depending on your specific needs.
+rd /s /q %%j: This command is executed for each directory matched by the inner loop.
+
+rd: This is the "remove directory" command used to delete directories (folders).
+/s: This option specifies that the command should delete the specified directory and all its subdirectories and files.
+/q: This option stands for "quiet" and suppresses confirmation prompts when deleting directories.
+%%j: This variable represents the directory to be deleted, which is the result of the inner loop.
+.......................................................................
+for /d %%i in ("%sanket%:\m????DVD"):
+for is used to create a loop in a batch script.
+/d specifies that you want to loop through directories.
+%%i is a loop variable that will represent each directory found in the specified path.
+"%bld.drv%:\m????DVD" is the pattern used to match directories. It seems to be a placeholder for a variable named bld.drv with a drive letter followed by "\m" and then a sequence of four characters followed by "DVD." The question marks are placeholders for any characters.
+do rd /s /q %%i:
+do is used to specify the action to be taken for each directory that matches the pattern.
+rd is the remove directory command, used to delete directories.
+/s tells the rd command to remove the directory and its subdirectories.
+/q tells the rd command to do it quietly (without asking for confirmation).
+--------------------------------------------------------------------------------------------------------------
+5 e:\cmds\set_env.cmd
+it sets some default enviroment variables.
+------------------------------------------------------------------------------------------------------------------------------------
+6    E:\buildbat\build.bat
+this code is checking if the first command-line argument (represented by %1) is an empty string. If it is empty, it will jump to a label called "help" If it's not empty, it will continue with the script's execution after this line.
+.............................................
+set sanket2.drv=%sanket.drv%: This line sets the environment variable startup.drv to the same value as bld.drv. It essentially copies the value of bld.drv to startup.drv.
+
+set SDEBUH=Y: This line sets the environment variable SDEBUH to "Y," presumably enabling some form of debugging or additional functionality in the script.
+
+if X%2 == Xd set SDEBUH=: This line checks if the value of the command-line argument (%2) is equal to "d" (case-sensitive). If it is, it sets the BDEBUG environment variable to an empty string, effectively turning off debugging or overriding the previous setting.
+
+if X%2 == XD set SDEBUH=: This line checks if the value of the command-line argument (%2) is equal to "XD" (case-sensitive). If it is, it also sets the BDEBUG environment variable to an empty string, again turning off debugging or overriding the previous setting.
+............................................
+ It checks if the "bld.drv" variable is not empty or null. If it's not empty, it jumps to the label "cont"; otherwise, it continues with the script.
+dir command to list the directory contents which includes volume information and the output to the find command, which searches for the string "Volume" in the output. The results are then redirected to a file called "drv$$$.bat"
+"%%3" is a way to represent the third item found by the find command in the previous line.
+This likely means that "drv$$$.bat" contains some batch commands to process volume information, and this line executes them.
+This line deletes the " drv$$$.bat" file, presumably because it's no longer needed after it has been executed.
+This line deletes the "volume.bat" file, which was used to store the "set sanket=%%3" command earlier. This file may no longer be needed after the variable has been set and used.
+..............................................................................
+if %country% == T goto tai
+So, if the value of the contry environment variable is equal to "I," the script will jump to the label "india." If it's not equal, the script will continue executing the next lines of code.
+after setting the environment varibale to all country its goes to change dir \buildbat
+and first it calls to the buildbat/start_bld.bat
+....................................................................
+
+
+
+
+
+
+
+
+
+
+
