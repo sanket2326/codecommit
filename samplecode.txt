@@ -100,8 +100,16 @@ This line deletes the "volume.bat" file, which was used to store the "set sanket
 if %country% == T goto tai
 So, if the value of the contry environment variable is equal to "I," the script will jump to the label "india." If it's not equal, the script will continue executing the next lines of code.
 after setting the environment varibale to all country its goes to change dir \buildbat
-and first it calls to the buildbat/start_bld.bat
+and first it calls to the buildbat/start_bld.bat its sets enviroment variable and using echo command to print the msg build setup start
 ....................................................................
+2 E:\buildbat\blenvset.bat
+   Sets bld_alias env var and sets the temp directories.then its checked the file is present or not in d:cmvc\buildbat\pluto.mak if present goto ok if not present goto error.
+..............................................
+after its go to change dir and rd is the remove directory command, used to delete directories.
+/s tells the rd command to remove the directory and its subdirectories.
+/q tells the rd command to do it quietly (without asking for confirmation).
+and then create a new dir and change dir to build and copy the e:buildbat\build.log to e:build\build.log and its call to child script \buildbat\blcpyset and checked temp dir if not exit its create temp dir using md command 
+................................................................
 
 
 
